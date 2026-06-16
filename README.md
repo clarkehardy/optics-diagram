@@ -80,15 +80,23 @@ optional rounded corners and arrowheads), `annotation` (labels with optional arr
 
 ## Examples
 
-Full, runnable diagrams from real experiments live in [`examples/`](examples/):
+Full, runnable diagrams from real experiments live in [`examples/`](examples/). Each
+script writes its figure to `examples/output/`.
 
-- [`examples/nanosphere_setup.py`](examples/nanosphere_setup.py) — a levitated-nanosphere
-  trapping and readout layout.
-- [`examples/microsphere_setup.py`](examples/microsphere_setup.py) — a detailed
-  microsphere interferometric readout layout with input/output optics, vacuum chamber,
-  and a section view.
+### Levitated-nanosphere setup
 
-Each script writes its figure to `examples/output/`.
+[`examples/nanosphere_setup.py`](examples/nanosphere_setup.py) — a levitated-nanosphere
+trapping and readout layout.
+
+![Nanosphere setup](assets/nanosphere_setup.png)
+
+### Microsphere setup
+
+[`examples/microsphere_setup.py`](examples/microsphere_setup.py) — a detailed microsphere
+interferometric readout layout with input/output optics, a vacuum chamber, and a section
+view.
+
+![Microsphere setup](assets/microsphere_setup.png)
 
 ## Acknowledgements
 

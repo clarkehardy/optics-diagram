@@ -20,7 +20,7 @@ from opticsdiagram import OpticsDiagram, COMPONENT_REGISTRY
 # COMPONENT_SIZE is chosen so even the largest elements stay inside the tile.
 TILE = 1.0
 CENTER = TILE / 2
-COMPONENT_SIZE = 0.16
+COMPONENT_SIZE = 0.22
 NCOLS = 6
 
 # Order categories sensibly; any category not listed falls to the end in first-seen order.
@@ -35,7 +35,7 @@ CATEGORY_ORDER = [
     "Fibers & couplers",
     "Chambers & traps",
     "Electronics",
-    "Markers",
+    "Diagram elements",
 ]
 
 
@@ -72,11 +72,8 @@ def make_grid(outpath):
 
     for ax, (_, meta) in zip(axes, entries):
         _draw_component(ax, meta)
-        ax.set_frame_on(True)
-        for spine in ax.spines.values():
-            spine.set_edgecolor("0.85")
         ax.text(
-            0.5, -0.06, meta["display_name"], transform=ax.transAxes,
+            0.5, -0.04, meta["display_name"], transform=ax.transAxes,
             ha="center", va="top", fontsize=9,
         )
 

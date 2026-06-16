@@ -26,10 +26,10 @@ fontsize = 8
 od = OpticsDiagram((4, 3), component_size, fontsize, check_frame=False)
 
 od.octagonal_chamber(x_sphere, y_sphere, 0.7, angle=0, viewports=(True, True, True, True))
-od.lens(x_sphere - 0.2, y_sphere, angle=90)
-od.lens_holder(x_sphere - 0.2, y_sphere, angle=90)
-od.lens(x_sphere + 0.2, y_sphere, angle=90)
-od.lens_holder(x_sphere + 0.2, y_sphere, angle=90)
+od.lens(x_sphere - 0.2, y_sphere, angle=0)
+od.lens_holder(x_sphere - 0.2, y_sphere, angle=0)
+od.lens(x_sphere + 0.2, y_sphere, angle=0)
+od.lens_holder(x_sphere + 0.2, y_sphere, angle=0)
 
 od.cube_bs(x_sphere - 1.0, y_sphere)
 od.annotation(x_sphere - 1.0, y_sphere + 0.2, 'PBS', ha='center', va='bottom')
@@ -60,8 +60,8 @@ od.circulator(x_sphere - 0.7, y_sphere, 0, reflected=True)
 od.collimator(x_sphere - 0.7, y_sphere - 0.3, 90)
 od.wire(((x_sphere - 0.7, y_sphere - 0.4), (x_sphere - 0.7, y_sphere - 1)), color='dodgerblue')
 
-od.photodiode(x_sphere - 0.4, y_sphere - 0.7, angle=-90)
-od.photodiode(x_sphere - 0.7, y_sphere - 1, angle=180)
+od.photodiode(x_sphere - 0.4, y_sphere - 0.7, angle=-180)
+od.photodiode(x_sphere - 0.7, y_sphere - 1, angle=90)
 
 od.microsphere(x_sphere, y_sphere)
 
@@ -71,7 +71,7 @@ od.annotation(x_sphere - 2.1, y_sphere - 0.2, '1064 nm', ha='right', va='top')
 od.laser(x_sphere, y_sphere + 0.7, color='violet', angle=-90)
 od.annotation(x_sphere - 0.2, y_sphere + 0.9, '266 nm', ha='right', va='center')
 
-od.lens(x_sphere, y_sphere + 0.5)
+od.lens(x_sphere, y_sphere + 0.5, angle=-90)
 od.laser_beam(((x_sphere, y_sphere + 0.7), (x_sphere, y_sphere - 0.6)), color='violet', width=0.1 * component_size)
 od.beam_dump(x_sphere, y_sphere - 0.5, 90)
 

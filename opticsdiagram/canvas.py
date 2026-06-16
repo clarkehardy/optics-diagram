@@ -128,6 +128,11 @@ class OpticsDiagram:
         self.polarizer_colors = [self.blend_with_white('seagreen'), 'seagreen']
         self.chamber_color = 'grey'
         self.dichroic_colors = [self.blend_with_white('mediumslateblue'), 'mediumslateblue']
+        self.eom_colors = ['xkcd:pale brown', 'lemonchiffon']  # [electrodes, crystal]
+        self.circulator_color = 'xkcd:very light green'
+        self.coupler_color = 'xkcd:pale gold'
+        self.filament_color = 'xkcd:orangey red'
+        self.needle_colors = ['darkgrey', 'xkcd:electric lime']  # [shaft, glowing tip]
 
     @staticmethod
     def list_components():
@@ -170,7 +175,8 @@ class OpticsDiagram:
         """Save the figure to ``path``.
 
         Thin wrapper around :meth:`matplotlib.figure.Figure.savefig`; extra keyword
-        arguments (``dpi``, ``pad_inches``, ...) are forwarded unchanged.
+        arguments (``dpi``, ``bbox_inches``, ...) are forwarded unchanged.
+        ``pad_inches`` defaults to ``0`` (pass it explicitly to override).
 
         Parameters
         ----------
@@ -179,6 +185,7 @@ class OpticsDiagram:
         **kwargs
             Forwarded to :meth:`~matplotlib.figure.Figure.savefig`.
         """
+        kwargs.setdefault('pad_inches', 0.)
         self.fig.savefig(path, **kwargs)
 
     @component("Beamsplitter cube", "Beamsplitters")
@@ -598,9 +605,10 @@ class OpticsDiagram:
         x, y : float
             Centre of the photodiode's front surface.
         angle : float, optional
-            Orientation in degrees; the active face points along ``+y`` at
-            ``angle = 0``. Defaults to ``0``.
+            Orientation in degrees; at ``angle = 0`` the active face looks toward
+            ``-x``, catching a rightward beam. Defaults to ``0``.
         """
+        angle = angle + 90  # reorient so the default active face catches a rightward beam
         radius = self.component_size/2.
         diode_size = 0.5*radius
         diode_pad = 0.4*radius
@@ -648,7 +656,8 @@ class OpticsDiagram:
         x, y : float
             Centre of the photodiode's front surface (the quadrant area sits beyond it).
         angle : float, optional
-            Orientation in degrees. Defaults to ``0``.
+            Orientation in degrees; at ``angle = 0`` the sensor catches a rightward
+            beam. Defaults to ``0``.
         """
         radius = self.component_size/2.
         wire_thickness = 0.08*radius
@@ -656,6 +665,9 @@ class OpticsDiagram:
         surface_thickness = 0.2*radius
 
         self.photodiode(x, y, angle)
+
+        # the photodiode applies its own reorientation; match the quadrant stack to it
+        angle = angle + 90
 
         surf = Rectangle((x - radius, y + radius + 2*surface_thickness), \
                          2*radius, surface_size, angle=angle, rotation_point=(x, y), \
@@ -708,9 +720,10 @@ class OpticsDiagram:
         x, y : float
             Centre of the lens.
         angle : float, optional
-            Orientation in degrees; at ``angle = 0`` the optical axis is horizontal.
-            Defaults to ``0``.
+            Orientation in degrees; at ``angle = 0`` the optical axis is horizontal (a
+            rightward beam passes straight through). Defaults to ``0``.
         """
+        angle = angle + 90  # reorient so the default optical axis is horizontal
         width = self.component_size
         thickness = 0.3*width
         radius = 1.5*width
@@ -744,8 +757,10 @@ class OpticsDiagram:
         x, y : float
             Centre of the lens being held.
         angle : float, optional
-            Orientation in degrees, matching the lens. Defaults to ``0``.
+            Orientation in degrees, matching the lens (``angle = 0`` for a horizontal
+            optical axis). Defaults to ``0``.
         """
+        angle = angle + 90  # reorient to match the lens default (horizontal axis)
         width = self.component_size
         thickness = 0.3 * width
         left = Rectangle((x - width / 2 - thickness, y - thickness / 2), thickness, thickness, fc='silver', ec='none', angle=angle, rotation_point=(x, y))
@@ -780,11 +795,13 @@ class OpticsDiagram:
         x, y : float
             Reference position of the mirror.
         angle : float, optional
-            Orientation in degrees. Defaults to ``0``.
+            Orientation in degrees; at ``angle = 0`` the mirror takes in a rightward
+            beam. Defaults to ``0``.
         reflected : bool, optional
             Flip the parabola so the tall side is on the opposite end. Defaults to
             ``False``.
         """
+        angle = angle - 90  # reorient so the default beam axis is horizontal
         width = 1.4*self.component_size
         height = 2*self.component_size
         offset = 0.2*height
@@ -840,9 +857,10 @@ class OpticsDiagram:
         x, y : float
             Reference position at the front of the lens.
         angle : float, optional
-            Orientation in degrees; the lens points along ``-y`` at ``angle = 0``.
-            Defaults to ``0``.
+            Orientation in degrees; at ``angle = 0`` the lens looks toward ``-x``,
+            imaging a rightward beam. Defaults to ``0``.
         """
+        angle = angle + 90  # reorient so the default lens faces a rightward beam
         width = 1.1*self.component_size
         height = 0.3*width
         lens_length = 0.3*width
@@ -932,11 +950,12 @@ class OpticsDiagram:
         x, y : float
             Position of the emitting tip.
         angle : float, optional
-            Orientation in degrees; the package extends along ``+x`` at ``angle = 0``.
-            Defaults to ``0``.
+            Orientation in degrees; at ``angle = 0`` the LED emits toward ``+x`` (a
+            rightward beam). Defaults to ``0``.
         color : color, optional
             Emission colour. Defaults to ``'green'``.
         """
+        angle = angle + 180  # reorient so the default emission is a rightward beam
         width = 0.6*self.component_size
         height = 0.4*self.component_size
         size = self.data_to_points(height)
@@ -983,7 +1002,7 @@ class OpticsDiagram:
         rad = 0.6 * self.component_size
         arrow_rad = 0.6 * rad
         thickness = 0.1 * rad
-        circ = Circle((x, y), rad, ec='k', lw=2 * self.lw, fc='xkcd:very light green')
+        circ = Circle((x, y), rad, ec='k', lw=2 * self.lw, fc=self.circulator_color)
         self.ax.add_patch(circ)
         arrow = Wedge((x, y), arrow_rad, -60 + 60 * int(reflected) + angle, 180 + 60 * int(reflected) + angle, width=thickness, lw=0, color='k')
         self.ax.add_patch(arrow)
@@ -996,7 +1015,7 @@ class OpticsDiagram:
         head = Polygon(points, closed=True, color='k')
         self.ax.add_patch(head)
 
-    @component("Math operation", "Electronics", demo={"which": "+"})
+    @component("Math operation", "Diagram elements", demo={"which": "+"})
     def operation(self, x, y, which='+', angle=0):
         """Draw a circled mathematical operator (summing/difference junction).
 
@@ -1015,7 +1034,7 @@ class OpticsDiagram:
         self.ax.text(x - 0.1 * rad, y + 0.0 * rad, '$' + which + '$', fontsize=1.5 * self.fontsize, ha='center', va='center', rotation=angle, zorder=101)
         self.ax.add_patch(circle)
 
-    @component("Instrument box", "Electronics", demo={"label": "DAQ"})
+    @component("Instrument box", "Diagram elements", demo={"label": "DAQ"})
     def instrument(self, x, y, label, width=None, height=None):
         """Draw a labelled rounded box representing an instrument (DAQ, controller, ...).
 
@@ -1040,7 +1059,7 @@ class OpticsDiagram:
         self.ax.add_patch(box)
         self.ax.text(x, y, label, va='center', ha='center', fontsize=self.fontsize)
 
-    @component("Electro-optic modulator", "Electronics")
+    @component("Electro-optic modulator", "Beam control")
     def eom(self, x, y, angle=0):
         """Draw an electro-optic modulator as a crystal between two electrodes.
 
@@ -1054,14 +1073,14 @@ class OpticsDiagram:
         """
         width = 1.5 * self.component_size
         height = self.component_size
-        upper_rect = Rectangle((x - width / 2, y + 0.3 * height), width, 0.2 * height, lw=self.lw, ec='k', fc='xkcd:pale brown')
-        lower_rect = Rectangle((x - width / 2, y - 0.5 * height), width, 0.2 * height, lw=self.lw, ec='k', fc='xkcd:pale brown')
-        middle_rect = Rectangle((x - width / 2, y - 0.25 * height), width, 0.5 * height, lw=self.lw, ec='k', fc='lemonchiffon')
+        upper_rect = Rectangle((x - width / 2, y + 0.3 * height), width, 0.2 * height, lw=self.lw, ec='k', fc=self.eom_colors[0])
+        lower_rect = Rectangle((x - width / 2, y - 0.5 * height), width, 0.2 * height, lw=self.lw, ec='k', fc=self.eom_colors[0])
+        middle_rect = Rectangle((x - width / 2, y - 0.25 * height), width, 0.5 * height, lw=self.lw, ec='k', fc=self.eom_colors[1])
         self.ax.add_patch(lower_rect)
         self.ax.add_patch(upper_rect)
         self.ax.add_patch(middle_rect)
 
-    @component("Filament", "Sources")
+    @component("Filament", "Electronics")
     def filament(self, x, y, angle=0):
         """Draw a heated filament (a zig-zag glowing wire on two leads).
 
@@ -1077,11 +1096,11 @@ class OpticsDiagram:
         x_pts = np.array([0.4, 0.4, 0.4, 0, 0, 0.2, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.8, 1.0, 1.0, 0.6, 0.6, 0.6]) * width + x - width / 2
         y_pts = np.array([0.2, -0.2, 0, 0, 1, 1, 1.2, 0.8, 1.2, 0.8, 1.2, 0.8, 1, 1, 0, 0, 0.1, -0.1]) * height + y - height / 2
         points = self.rotate(np.array((x_pts, y_pts)).T, angle, rotation_point=(x, y))
-        self.ax.plot(points[5:-5, 0], points[5:-5, 1], lw=1.5 * self.lw, color='xkcd:orangey red')
+        self.ax.plot(points[5:-5, 0], points[5:-5, 1], lw=1.5 * self.lw, color=self.filament_color)
         self.ax.plot(points[:6, 0], points[:6, 1], lw=1.5 * self.lw, color='k')
         self.ax.plot(points[-6:, 0], points[-6:, 1], lw=1.5 * self.lw, color='k')
 
-    @component("Needle", "Chambers & traps")
+    @component("Needle", "Electronics")
     def needle(self, x, y, angle=0):
         """Draw a needle/tip (e.g. a loading or discharge needle) with a glowing point.
 
@@ -1097,9 +1116,9 @@ class OpticsDiagram:
         width = 0.1 * self.component_size
         points = ((x, y), (x - width / 2, y - height), (x + width / 2, y - height))
         points = self.rotate(points, angle, (x, y))
-        needle = Polygon(points, ec='none', fc='darkgrey')
+        needle = Polygon(points, ec='none', fc=self.needle_colors[0])
         self.ax.add_patch(needle)
-        self.ax.plot(x, y, marker=(7, 1, 0), ms=25 * self.lw, mew=0, color='xkcd:electric lime')
+        self.ax.plot(x, y, marker=(7, 1, 0), ms=25 * self.lw, mew=0, color=self.needle_colors[1])
 
     @component(
         "AC source", "Electronics",
@@ -1221,7 +1240,7 @@ class OpticsDiagram:
         width = self.component_size
         patch = Rectangle((x - width/2, y - width/2), width, width,
                           angle=angle, rotation_point='center', ec='k', \
-                          fc='xkcd:pale gold', lw=self.lw, zorder=100)
+                          fc=self.coupler_color, lw=self.lw, zorder=100)
         self.ax.add_patch(patch)
         radius = 0.3 * self.component_size
         xvals = np.linspace(-1 / np.sqrt(2), 1 - 1 / np.sqrt(2), 100) * radius + x
@@ -1640,7 +1659,7 @@ class OpticsDiagram:
         else:
             self.ax.text(x, y, text, **kwargs)
 
-    @component("Compass", "Markers")
+    @component("Compass", "Diagram elements")
     def compass(self, x, y, angle=0):
         """Draw a two-axis orientation compass (an L of labelled arrows).
 

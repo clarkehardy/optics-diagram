@@ -97,9 +97,9 @@ od.annotation(x_z_pd + 0.4, y_back_cam - 0.1, 'Ref. beam', ha='left', va='center
 od.waveplate(x_trap_wp, y_back_cam)
 od.annotation(x_trap_wp, y_back_cam + 0.15, 'HWP', ha='center', va='bottom')
 od.mirror(x_bs_far_1, y_z_pd, angle=45)
-od.photodiode(x_z_pd, y_z_pd, angle=-90)
+od.photodiode(x_z_pd, y_z_pd, angle=-180)
 od.annotation(x_z_pd + 0.2, y_z_pd, '$z$ PD', ha='left', va='center')
-od.camera(x_back_cam, y_back_cam, -90)
+od.camera(x_back_cam, y_back_cam, -180)
 od.laser_beam(((x_bs_far_1, y_input_pd), (x_bs_far_1, y_z_pd), (x_z_pd, y_z_pd)), beam_width)  # to ZPD
 od.laser_beam(((x_bs_far_1, y_back_cam), (x_z_pd, y_back_cam)), beam_width)  # reference beam
 od.laser_beam(((x_back_cam, y_back_cam), (x_bs_far_1, y_back_cam)), beam_width)  # to back refl. camera
@@ -118,16 +118,16 @@ od.cube_bs(x_bs_far_2, y_input_pd)
 od.annotation(x_bs_far_2, y_input_pd + 0.15, 'PBS', ha='center', va='bottom')
 od.beamsplitter(x_piezo, y_input_pd, angle=-45)
 od.annotation(x_piezo, y_input_pd - 0.15, '90:10', ha='center', va='top')
-od.photodiode(x_lens_1, y_input_pd, -90)
+od.photodiode(x_lens_1, y_input_pd, -180)
 od.annotation(x_lens_1 + 0.1, y_input_pd - 0.15, 'Input\npower PD', ha='center', va='top')
 od.piezo_deflector(x_piezo, y_piezo, angle=-45, reflected=False)
 od.annotation(x_piezo - 0.15, y_piezo + 0.15, 'Piezo\ndeflector', ha='center', va='bottom')
 od.laser_beam(((x_piezo, y_input_pd), (x_piezo, y_piezo), (x_lens_1, y_piezo)), beam_width)
 
 # ENTERING THE VACUUM CHAMBER
-od.lens(x_lens_1, y_piezo, angle=90)
+od.lens(x_lens_1, y_piezo, angle=0)
 od.annotation(x_lens_1 + 0.15, y_piezo - 0.1, '1:4\ntelescope', ha='center', va='top')
-od.lens(x_lens_2, y_piezo, angle=90)
+od.lens(x_lens_2, y_piezo, angle=0)
 od.focused_beam((x_lens_1, y_piezo), (x_lens_2, y_piezo), beam_width, 2 * beam_width)
 od.laser_beam(((x_lens_2, y_piezo), (x_sphere - component_size, y_piezo)), 2 * beam_width)
 
@@ -148,8 +148,8 @@ od.annotation(x_prism_mirror, y_s_port, 'Prism\nmirror', ha='right', va='bottom'
 
 # SECTION VIEW OF THE CHAMBER
 od.section_view(x_sphere, y_sphere, sec_width, sec_height, sec_offset - sec_height/2)
-od.parabolic_mirror(x_sphere, y_sphere + sec_offset - parab_offset, 90, reflected=True)
-od.parabolic_mirror(x_sphere, y_sphere + sec_offset + parab_offset, -90, reflected=True)
+od.parabolic_mirror(x_sphere, y_sphere + sec_offset - parab_offset, 180, reflected=True)
+od.parabolic_mirror(x_sphere, y_sphere + sec_offset + parab_offset, 0, reflected=True)
 od.annotation(4.0, 0.6, 'Parabolic mirror', \
               arrow_pos=(x_sphere + 0.2, y_sphere + sec_offset - parab_offset), \
               ha='center', va='center')
@@ -184,12 +184,12 @@ od.laser_beam(((x_sphere + component_size, y_aperture), (x_lens_3, y_aperture)),
 od.focused_beam((x_lens_3, y_aperture), (x_lens_4, y_aperture), 2*beam_width, beam_width)
 
 # OUTPUT OPTICS LEFT TO RIGHT
-od.lens(x_lens_3, y_aperture, 90)
+od.lens(x_lens_3, y_aperture, 0)
 od.annotation(x_lens_3 + 0.2, y_aperture + 0.15, '4:1 \ntelescope', ha='center', va='bottom')
 od.aperture(x_aperture, y_aperture, 0)
 od.annotation(x_aperture, 1.3, r'50 $\mu$m aperture', arrow_pos=(x_aperture, y_aperture - 0.15), \
               ha='center', va='top')
-od.lens(x_lens_4, y_aperture, 90)
+od.lens(x_lens_4, y_aperture, 0)
 od.pellicle(x_pellicle, y_aperture, -45)
 od.annotation(x_pellicle, y_aperture - 0.15, '45:55\npellicle\nBS', ha='center', va='top')
 od.mirror(x_pellicle, y_bs_row, -45)
@@ -203,13 +203,13 @@ od.beamsplitter(x_trans_pd, y_bs_row, -45)
 od.annotation(x_trans_pd, y_bs_row - 0.15, 'BS', ha='center', va='top')
 od.beam_dump(x_trans_pd + 0.12, y_bs_row, 180)
 od.laser_beam(((x_trans_pd, y_bs_row), (x_trans_pd + 0.12, y_bs_row)), beam_width)
-od.photodiode(x_trans_pd, y_trans_pd)
+od.photodiode(x_trans_pd, y_trans_pd, -90)
 od.annotation(x_trans_pd + 0.05, y_trans_pd + 0.15, 'Trans.\npower\nPD', ha='center', va='bottom')
 od.diffuser(x_dc_qpd, y_forward_cam)
 od.annotation(x_dc_qpd, y_forward_cam + 0.15, 'Phase\ndiffuser', ha='center', va='bottom')
-od.camera(x_trans_pd, y_forward_cam, 90)
+od.camera(x_trans_pd, y_forward_cam, 0)
 od.annotation(x_trans_pd + 0.15, y_forward_cam - 0.15, 'Forward\ncamera', ha='right', va='top')
-od.qpd(x_dc_qpd, y_qpd, 0)
+od.qpd(x_dc_qpd, y_qpd, -90)
 od.annotation(x_dc_qpd, y_qpd + 0.45, 'DC QPD', ha='center', va='bottom')
 
 # REFERENCE BEAM OPTICS
@@ -222,7 +222,7 @@ od.annotation(x_het_ref - 0.35, y_het_ref - 0.15, 'PBS', ha='center', va='top')
 od.beamsplitter(x_het_qpd, y_aperture, -45)
 od.annotation(x_het_qpd - 0.05, y_aperture + 0.05, 'BS', ha='right', va='bottom')
 od.beam_dump(x_het_qpd + 0.15, y_aperture, 180)
-od.qpd(x_het_qpd, y_qpd, 0)
+od.qpd(x_het_qpd, y_qpd, -90)
 od.annotation(x_het_qpd, y_qpd + 0.45, 'Het. QPD', ha='center', va='bottom')
 
 # OUTPUT LASER BEAMS
@@ -241,25 +241,25 @@ od.laser_beam(((x_prism_mirror, y_aperture), (x_prism_mirror, y_s_port), (x_aper
 # S-POLARIZED PORT OPTICS
 od.cube_bs(x_aperture - 0.1, y_s_port, -90, block_beam=False)
 od.annotation(x_aperture - 0.1, y_s_port - 0.15, 'BS', ha='center', va='top')
-od.photodiode(x_spin_pd, y_spin_pd, -90)
+od.photodiode(x_spin_pd, y_spin_pd, -180)
 od.annotation(x_spin_pd + 0.05, y_spin_pd - 0.15, 'Spin\nPD', ha='center', va='top')
 od.flip_mirror(x_aperture - 0.03 + 0.2, y_spin_pd, -45, False, False, True)
 od.annotation(x_aperture - 0.4 + 0.2, y_spin_pd - 0.15, 'Flip-\nmounted\ndichroic\nmirror', ha='right', va='bottom')
-od.camera(x_aperture + 0.2, y_top_cam, 180)
+od.camera(x_aperture + 0.2, y_top_cam, 90)
 od.annotation(x_aperture + 0.2, y_top_cam + 0.2, 'Top camera', ha='center', va='bottom')
-od.led(x_aperture - 0.1, y_s_port + 0.3, 90, color='darkred')
+od.led(x_aperture - 0.1, y_s_port + 0.3, -90, color='darkred')
 od.annotation(x_aperture - 0.25, y_s_port + 0.35, '880 nm LED', ha='right', va='bottom')
 od.mirror(x_aperture + 0.22, y_s_port - 0.02, 135)
 
 # SIDE CAMERAS
-od.camera(x_sphere, y_top_cam, 180)
+od.camera(x_sphere, y_top_cam, 90)
 od.cube_bs(x_sphere, y_spin_pd)
 od.annotation(x_sphere - 0.1, y_spin_pd + 0.1, 'BS', ha='right', va='bottom')
-od.camera(x_lens_2, y_top_cam, 180)
+od.camera(x_lens_2, y_top_cam, 90)
 od.annotation((x_sphere + x_lens_2)/2., y_top_cam + 0.2, 'Side cameras', ha='center', va='bottom')
 od.beamsplitter(x_lens_2, y_spin_pd, 45)
 od.annotation(x_lens_2 - 0.1, y_spin_pd + 0.1, 'BS', ha='right', va='bottom')
-od.led(x_piezo, y_spin_pd, 180, color='darkred')
+od.led(x_piezo, y_spin_pd, 0, color='darkred')
 od.annotation(x_piezo, y_spin_pd + 0.15, '880 nm LED', ha='center', va='bottom')
 od.beam_dump(x_lens_2, y_spin_pd - 0.15, 90)
 od.laser_beam(((x_sphere, y_sphere), (x_sphere, y_spin_pd), (x_lens_2, y_spin_pd), \
