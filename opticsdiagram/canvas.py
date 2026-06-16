@@ -1296,7 +1296,8 @@ class OpticsDiagram:
         "Vacuum chamber", "Chambers & traps",
         demo=lambda od, x, y: od.vacuum_chamber(
             x, y, 0.7, 0.55,
-            viewports=((x - 0.35, y), (x + 0.35, y), (x, y + 0.275), (x, y - 0.275)),
+            viewports=((x - 0.35, y), (x + 0.35, y),
+                       (x, y + 0.275, 90), (x, y - 0.275, 90)),
         ),
     )
     def vacuum_chamber(self, x, y, width, height, angle=0, viewports=None):
