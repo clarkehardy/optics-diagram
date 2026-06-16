@@ -41,8 +41,8 @@ od.annotation(0.6, 1.2, "1064 nm", ha="center", va="top")
 
 od.waveplate(1.4, 1.5)
 od.cube_bs(2.0, 1.5)
-od.lens(2.6, 1.5, angle=90)
-od.photodiode(3.3, 1.5, angle=-90)
+od.lens(2.6, 1.5)
+od.photodiode(3.3, 1.5)
 
 od.laser_beam([(0.6, 1.5), (3.3, 1.5)])
 
@@ -51,8 +51,29 @@ od.savefig("layout.pdf")
 
 Every placeable element is a method called as `od.<element>(x, y, angle=...)`. Elements
 draw themselves onto the canvas and return nothing — you place one where you want it
-(optionally tweaking the position or angle) and move on. Position, `component_size`, and
-beam paths are all in the same data units as the axis limits.
+(optionally tweaking the position or angle) and move on.
+
+### How positions and sizes work
+
+- **You choose the figure size.** `figsize=(width, height)` sets the canvas size in
+  inches. The drawing area spans `[0, width] x [0, height]`, so **one data unit is one
+  inch** and every coordinate is measured in inches from the **bottom-left corner**.
+- **`component_size` is the base size of a component, in inches.** Every element is
+  scaled as a fixed multiple of it, so it sets the overall scale of the diagram.
+- **Place each element at an `(x, y)` position** in inches from the bottom-left corner.
+  Beam paths, wire paths, and annotation positions all use these same coordinates.
+
+### Rotating and mirroring components
+
+Most elements take an `angle` (in degrees, counter-clockwise positive) that rotates them
+about their `(x, y)` position. Components that produce or interact with a beam are drawn,
+at `angle = 0`, for a beam travelling **horizontally to the right** — so a left-to-right
+beam needs no rotation, and you rotate detectors, lenses, mirrors, sources, etc. only to
+send the beam in another direction.
+
+Some components are not left–right symmetric and can additionally be flipped with
+`reflected=True` to swap their handedness — for example `flip_mirror`, `piezo_deflector`,
+`parabolic_mirror`, `circulator`, and the fiber pigtail on `collimator` / `fiber`.
 
 ## Available components
 

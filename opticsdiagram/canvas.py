@@ -860,7 +860,7 @@ class OpticsDiagram:
             Orientation in degrees; at ``angle = 0`` the lens looks toward ``-x``,
             imaging a rightward beam. Defaults to ``0``.
         """
-        angle = angle + 90  # reorient so the default lens faces a rightward beam
+        angle = angle - 90  # reorient so the default lens faces a rightward beam
         width = 1.1*self.component_size
         height = 0.3*width
         lens_length = 0.3*width
@@ -1123,8 +1123,8 @@ class OpticsDiagram:
     @component(
         "AC source", "Electronics",
         demo=lambda od, x, y: od.ac_source(
-            x, y, [(x - 0.45 * od.component_size, y),
-                   (x - 0.45 * od.component_size, y - 1.5 * od.component_size)],
+            x, y, [(x - 1.1 * od.component_size, y),
+                   (x - 1.1 * od.component_size, y - 1.4 * od.component_size)],
         ),
     )
     def ac_source(self, x, y, wire_path, connection='left', angle=0):
