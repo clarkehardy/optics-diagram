@@ -1024,15 +1024,17 @@ class OpticsDiagram:
         x, y : float
             Centre of the symbol.
         which : str, optional
-            Operator rendered inside the circle (LaTeX math), e.g. ``'+'`` or ``'-'``.
+            Operator rendered inside the circle, e.g. ``'+'`` or ``'-'``.
             Defaults to ``'+'``.
         angle : float, optional
             Rotation of the symbol in degrees. Defaults to ``0``.
         """
         rad = 0.4 * self.component_size
         circle = Circle((x, y), rad, ec='k', fc='white', lw=2 * self.lw, zorder=100)
-        self.ax.text(x - 0.1 * rad, y + 0.0 * rad, '$' + which + '$', fontsize=1.5 * self.fontsize, ha='center', va='center', rotation=angle, zorder=101)
         self.ax.add_patch(circle)
+        which = '_' if which == '-' else which
+        marker = markers.MarkerStyle(which).rotated(deg=angle)
+        self.ax.plot(x, y, marker=marker, ms=self.data_to_points(1.2 * rad), color='k', zorder=101)
 
     @component("Instrument box", "Diagram elements", demo={"label": "DAQ"})
     def instrument(self, x, y, label, width=None, height=None):
