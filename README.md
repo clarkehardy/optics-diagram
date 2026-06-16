@@ -63,6 +63,23 @@ draw themselves onto the canvas and return nothing — you place one where you w
 - **Place each element at an `(x, y)` position** in inches from the bottom-left corner.
   Beam paths, wire paths, and annotation positions all use these same coordinates.
 
+### What `(x, y)` anchors
+
+Each component is positioned by its *optically meaningful* point, so an element sits
+exactly where its beam meets the rest of the layout — you place components by where the
+light goes, not by their bounding box. Specifically, `(x, y)` is:
+
+- where the light **originates**, for sources (e.g. `laser`, `led`, `collimator`);
+- where the light **terminates**, for detectors and sinks (e.g. `photodiode`, `qpd`,
+  `camera`, `beam_dump`);
+- the **midpoint of the beam's path through the element**, for in-line optics the beam
+  passes through (e.g. `lens`, `waveplate`, `beamsplitter`, `faraday_rotator`); and
+- the **point where the beam meets the optic**, for mirrors and similar fold elements
+  (e.g. `mirror`, `prism_mirror`).
+
+This means a beam can usually be drawn as a polyline straight through the `(x, y)`
+positions of the components along its path.
+
 ### Rotating and mirroring components
 
 Most elements take an `angle` (in degrees, counter-clockwise positive) that rotates them
