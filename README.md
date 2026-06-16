@@ -124,3 +124,7 @@ view.
 The visual design of many of the components was inspired by the excellent
 [gwoptics Component Library](http://www.gwoptics.org/ComponentLibrary/), a set of
 optical-layout drawing primitives from the gravitational-wave optics group.
+
+## License
+
+Released under the [MIT License](LICENSE).
