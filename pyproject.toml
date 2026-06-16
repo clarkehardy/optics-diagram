@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "opticsdiagram"
+version = "0.1.0"
+description = "Publication-quality optics layout diagrams with matplotlib."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Clarke Hardy", email = "clarkehardy96@gmail.com" }]
+keywords = ["optics", "matplotlib", "diagram", "schematic", "physics", "figures"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Framework :: Matplotlib",
+    "Intended Audience :: Science/Research",
+]
+dependencies = [
+    "numpy",
+    "matplotlib",
+]
+
+[project.urls]
+Homepage = "https://github.com/clarkehardy/optics-diagram"
+Repository = "https://github.com/clarkehardy/optics-diagram"
+
+[tool.hatch.build.targets.wheel]
+packages = ["opticsdiagram"]
